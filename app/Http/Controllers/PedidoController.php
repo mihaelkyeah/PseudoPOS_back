@@ -16,9 +16,12 @@ class PedidoController extends Controller
 
         $datos = $request->all();
 
+        if((string)$datos['mesa_id'] !== (string)(int)$datos['mesa_id'] || (int)$datos['mesa_id'] < 1)
+            return response()->json(['success' => false, 'message' => "Ingrese un ID de mesa válido."], 400);
+
         $mesaValida = Mesa::find($datos['mesa_id']);
         if($mesaValida === null)
-            return response()->json(['success' => false, 'message' => "La mesa ingresada no existe 👎"], 400);
+            return response()->json(['success' => false, 'message' => "La mesa ingresada no existe."], 400);
 
         foreach($datos['pedidos'] as $pedidoRequest)
         {
@@ -62,8 +65,19 @@ class PedidoController extends Controller
 
     public function setOrdenLista($mesaID)
     {
+        if((string)$mesaID !== (string)(int)$mesaID || (int)$mesaID < 1)
+            return response()->json(['success' => false, 'message' => "Ingrese un ID de mesa válido."], 400);
+
         $mesa = Mesa::find($mesaID);
+
+        if($mesa === null)
+            return response()->json(['success' => false, 'message' => "La mesa ingresada no existe."], 400);
+
         $pedidos = $mesa->pedidos;
+
+        if(count($pedidos) === 0)
+            return response()->json(['success' => false, 'message' => "No hay orden para esta mesa."], 404);
+
         $result = [];
 
         foreach($pedidos as $pedido)
