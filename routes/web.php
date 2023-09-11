@@ -22,4 +22,4 @@ Route::get('/pedido/pendientes', [PedidoController::class, 'getPendientes'])->na
 
 Route::post('/pedido/create', [PedidoController::class, 'create'])->name('pedido.create');
 
-Route::get('/pedido/marcarListo/{mesaID}', [PedidoController::class, 'setOrdenLista'])->name('pedido.marcarListo');
+Route::put('/pedido/marcarListo/{mesaID}', [PedidoController::class, 'setOrdenLista'])->name('pedido.marcarListo');

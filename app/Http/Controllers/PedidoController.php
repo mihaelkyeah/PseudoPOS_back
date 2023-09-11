@@ -68,7 +68,7 @@ class PedidoController extends Controller
 
         foreach($pedidos as $pedido)
         {
-            $pedido->lista = true;
+            $pedido->update(['lista' => true]);
             $result[] = $pedido;
         }
 
