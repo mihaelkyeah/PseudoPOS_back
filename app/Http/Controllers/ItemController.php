@@ -71,7 +71,8 @@ class ItemController extends Controller
 
         foreach($items as $item)
         {
-            $item->update(['listo' => true]);
+            $item->listo = true;
+            $item->save();
         }
 
         return response()->json(['itemsOrdenLista' => $items], 200);
@@ -79,7 +80,7 @@ class ItemController extends Controller
 
     // Otra vez comiteé cambios que correspondían a un caso de uso
     // dentro de un commit que tenía que ver con otra cosa
-    // Los cambios correspondientes al caso de uso 4 se encuentran desde la línea 83 hasta la 105. Chasgracias
+    // Los cambios correspondientes al caso de uso 4 se encuentran desde la línea 84 hasta la 106. Chasgracias
     public function entregarOrden($mesaID)
     {
         $mesa = Mesa::find($mesaID);
@@ -91,15 +92,15 @@ class ItemController extends Controller
         if(count($items) === 0)
             return response()->json(['success' => true, 'message' => "No hay orden para esta mesa."], 204);
 
+        // Se fija en todos los ítems de una mesa y verifica que estén todos listos
         foreach($items as $item)
         {
             if(!$item->listo)
                 return response()->json(['success' => false, 'message' => "La orden no está lista."], 403);
+            $item->entregado = true;
         }
-        foreach($items as $item)
-        {
-            $item->update(['entregado' => true]);
-        }
+        // Una vez pasado por todos los ítems de una mesa sin errores, aplica los cambios
+        $items->each->save();
 
         return response()->json(['itemsOrdenLista' => $items], 200);
     }
