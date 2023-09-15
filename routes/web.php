@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +18,10 @@ Route::get('/', function () {
     return response()->json(['success' => $success, 'message' => 'Welcome'], 200);
 });
 
-Route::get('/pedido/pendientes', [PedidoController::class, 'getPendientes'])->name('pedido.pendientes');
+Route::get('/item/pendientes', [ItemController::class, 'getPendientes'])->name('item.pendientes');
 
-Route::post('/pedido/create', [PedidoController::class, 'create'])->name('pedido.create');
+Route::post('/item/create', [ItemController::class, 'create'])->name('item.create');
 
-Route::put('/pedido/marcarListo/{mesaID}', [PedidoController::class, 'setOrdenLista'])->name('pedido.marcarListo');
+Route::put('/orden/marcarLista/{mesaID}', [ItemController::class, 'setOrdenLista'])->name('orden.marcarLista');
+
+Route::put('/orden/entregar/{mesaID}', [ItemController::class, 'entregarOrden'])->name('orden.entregar');

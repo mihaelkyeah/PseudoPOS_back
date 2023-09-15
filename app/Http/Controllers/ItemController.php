@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pedido;
+use App\Models\Item;
 use App\Models\Mesa;
 
 class ItemController extends Controller
@@ -21,7 +21,7 @@ class ItemController extends Controller
 
         foreach($datos['items'] as $itemRequest)
         {
-            $item = Pedido::make([
+            $item = Item::make([
                 'mesa_id' => $datos['mesa_id'],
                 'detalle' => $itemRequest['detalle'],
             ]);
@@ -41,7 +41,7 @@ class ItemController extends Controller
             'items',
             function($query)
             {
-                $query->whereLista(0);
+                $query->whereListo(0);
             }
         )->get();
 
@@ -77,6 +77,9 @@ class ItemController extends Controller
         return response()->json(['itemsOrdenLista' => $items], 200);
     }
 
+    // Otra vez comiteé cambios que correspondían a un caso de uso
+    // dentro de un commit que tenía que ver con otra cosa
+    // Los cambios correspondientes al caso de uso 4 se encuentran desde la línea 83 hasta la 105. Chasgracias
     public function entregarOrden($mesaID)
     {
         $mesa = Mesa::find($mesaID);
