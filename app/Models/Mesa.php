@@ -12,12 +12,12 @@ class Mesa extends Model
     public $timestamps = false;
 
     /**
-     * Get all of the pedidos for the Mesa
+     * Get all of the items for the Mesa
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function pedidos(): HasMany
+    public function items(): HasMany
     {
-        return $this->hasMany(Pedido::class);
+        return $this->hasMany(Item::class);
     }
 }

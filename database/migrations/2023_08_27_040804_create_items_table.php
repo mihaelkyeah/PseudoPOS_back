@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pedidos', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('mesa_id');
                 $table->foreign('mesa_id')->references('id')->on('mesas');
             $table->longText('detalle');
-            $table->boolean('lista')->default(false);
-            $table->boolean('entregada')->default(false);
+            $table->boolean('listo')->default(false);
+            $table->boolean('entregado')->default(false);
             // $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pedidos');
+        Schema::dropIfExists('items');
     }
 };

@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Mesa::factory(10)->create();
 
-        \App\Models\Pedido::factory(5)->create();
+        \App\Models\Item::factory(20)->create();
     }
 }

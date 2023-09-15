@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pedido>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Item>
  */
-class PedidoFactory extends Factory
+class ItemFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,8 @@ class PedidoFactory extends Factory
     {
         return [
             'mesa_id' => rand(1,10),
-            'detalle' => fake()->paragraph(rand(5,20)),
+            'detalle' => rand(0,1) === 0 ? "Sasarasa" : "Lorem Input",
+            // 'detalle' => fake()->paragraph(rand(5,10)),
         ];
     }
 }

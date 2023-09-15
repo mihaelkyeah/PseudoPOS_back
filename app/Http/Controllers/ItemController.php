@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pedido;
 use App\Models\Mesa;
 
-class PedidoController extends Controller
+class ItemController extends Controller
 {
     //
     public function create(Request $request)
@@ -19,14 +19,14 @@ class PedidoController extends Controller
         if($mesaValida === null)
             return response()->json(['success' => false, 'message' => "La mesa ingresada no existe."], 400);
 
-        foreach($datos['pedidos'] as $pedidoRequest)
+        foreach($datos['items'] as $itemRequest)
         {
-            $pedido = Pedido::make([
+            $item = Pedido::make([
                 'mesa_id' => $datos['mesa_id'],
-                'detalle' => $pedidoRequest['detalle'],
+                'detalle' => $itemRequest['detalle'],
             ]);
 
-            $tmpSuccess = $pedido->save();
+            $tmpSuccess = $item->save();
             if(!$tmpSuccess)
                 $success = false;
         }
@@ -38,7 +38,7 @@ class PedidoController extends Controller
     {
         $mesas = Mesa::whereHas
         (
-            'pedidos',
+            'items',
             function($query)
             {
                 $query->whereLista(0);
@@ -51,7 +51,7 @@ class PedidoController extends Controller
         {
             $result[] = [
                 'mesa' => $mesa->id,
-                'pedidos' => $mesa->pedidos->where('lista', 0)->values(),
+                'items' => $mesa->items->where('listo', 0)->values(),
             ];
         }
 
@@ -64,22 +64,41 @@ class PedidoController extends Controller
         if($mesa === null)
             return response()->json(['success' => false, 'message' => "La mesa ingresada no existe."], 400);
 
-        $pedidos = $mesa->pedidos;
+        $items = $mesa->items;
 
-        if(count($pedidos) === 0)
+        if(count($items) === 0)
             return response()->json(['success' => true, 'message' => "No hay orden para esta mesa."], 204);
 
-        foreach($pedidos as $pedido)
+        foreach($items as $item)
         {
-            $pedido->update(['lista' => true]);
+            $item->update(['listo' => true]);
         }
 
-        return response()->json(['itemsOrdenLista' => $pedidos], 200);
+        return response()->json(['itemsOrdenLista' => $items], 200);
     }
 
     public function entregarOrden($mesaID)
     {
+        $mesa = Mesa::find($mesaID);
+        if($mesa === null)
+            return response()->json(['success' => false, 'message' => "La mesa ingresada no existe."], 400);
 
+        $items = $mesa->items;
+
+        if(count($items) === 0)
+            return response()->json(['success' => true, 'message' => "No hay orden para esta mesa."], 204);
+
+        foreach($items as $item)
+        {
+            if(!$item->listo)
+                return response()->json(['success' => false, 'message' => "La orden no está lista."], 403);
+        }
+        foreach($items as $item)
+        {
+            $item->update(['entregado' => true]);
+        }
+
+        return response()->json(['itemsOrdenLista' => $items], 200);
     }
 
 }
